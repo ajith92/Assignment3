@@ -1,7 +1,7 @@
 import random
 
 def display(grid):
-  print
+	print
 	for i in range(grid.__len__()):
 		for j in range(grid.__len__()):
 			print "\t",grid[i][j],
@@ -28,29 +28,29 @@ def cost_grid():
 	global cgrid
 	global pgrid
 
-	i=grid.__len__()-1
+	i=0
 	for j in range(grid.__len__()):
 		cgrid[i][j]=grid[i][j]	
 	
-	for i in range(grid.__len__()-2,-1,-1):
+	for i in range(1,grid.__len__()):
 		for j in range(grid.__len__()):	
-			dl,d,dr=j-1,j,j+1		#taking a loop will not help us				
-			if dl>=0:
-				val=grid[i][j]+cgrid[i+1][dl]
+			ul,u,ur=j-1,j,j+1		#taking a loop will not help us				
+			if ul>=0:
+				val=grid[i][j]+cgrid[i-1][ul]
 				if val>cgrid[i][j]:
 					cgrid[i][j]=val
-					pgrid[i][j]='dl'
+					pgrid[i][j]='ul'
 			
-			val=grid[i][j]+cgrid[i+1][d]
+			val=grid[i][j]+cgrid[i-1][u]
 			if val>cgrid[i][j]:
 				cgrid[i][j]=val
-				pgrid[i][j]='d'
+				pgrid[i][j]='u'
 			
-			if dr<grid.__len__():	
-				val=grid[i][j]+cgrid[i+1][dr]
+			if ur<grid.__len__():	
+				val=grid[i][j]+cgrid[i-1][ur]
 				if val>cgrid[i][j]:
 					cgrid[i][j]=val
-					pgrid[i][j]='dr'
+					pgrid[i][j]='ur'
 			
 def find_path(i,j):
 	global grid,pgrid
@@ -58,13 +58,13 @@ def find_path(i,j):
 		print "%d" %grid[i][j]
 		return
 	else:
-		print "%d" %grid[i][j], " <-",
-		if pgrid[i][j]=='dl':
-			find_path(i+1,j-1)
-		elif pgrid[i][j]=='d':
-			find_path(i+1,j)
-		elif pgrid[i][j]=='dr':
-			find_path(i+1,j+1)
+		print "%d" %grid[i][j], " >>",
+		if pgrid[i][j]=='ul':
+			find_path(i-1,j-1)
+		elif pgrid[i][j]=='u':
+			find_path(i-1,j)
+		elif pgrid[i][j]=='ur':
+			find_path(i-1,j+1)
 		
 				
 	
@@ -92,7 +92,7 @@ if __name__=='__main__':
 	display(cgrid)
 
 	display(pgrid)
-	print "Maximum cost you can get is :", max(cgrid[0])
+	print "Maximum cost you can get is :", max(cgrid[cgrid.__len__()-1])
 	print "And one such path is : "
-	index=cgrid[0].index(max(cgrid[0]))
-	find_path(0,index)
+	index=cgrid[cgrid.__len__()-1].index(max(cgrid[cgrid.__len__()-1]))
+	find_path(cgrid.__len__()-1,index)
